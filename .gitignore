@@ -1,0 +1,15 @@
+# Dataset
+dataset/
+data/
+images/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Env
+.envcl
