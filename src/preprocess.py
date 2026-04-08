@@ -5,9 +5,9 @@ import numpy as np
 IMG_SIZE = 128
 
 
-# ===== SIGNATURE DATA =====
+
 def load_signature_data():
-    path = "../dataset/signature"   # ✅ FIXED PATH
+    path = "../dataset/signature"  
     images = []
     labels = []
 
@@ -32,9 +32,9 @@ def load_signature_data():
     return np.array(images), np.array(labels)
 
 
-# ===== IMAGE DATA =====
+
 def load_image_data():
-    path = "../dataset/image"   # ✅ FIXED PATH
+    path = "../dataset/image"   
     images = []
     labels = []
 
