@@ -1,16 +1,134 @@
 <!DOCTYPE html>
-<html>
-<body style="text-align:center; margin-top:50px;">
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Document Verification System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    body { font-family: 'DM Sans', sans-serif; }
+    .display-font { font-family: 'Playfair Display', serif; }
 
-<h1>AI Document Verification System</h1>
+    .noise-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
 
-<p>This system detects forged images and signatures using deep learning.</p>
+    .header-bar {
+      background: linear-gradient(90deg, #1a1209 0%, #2d1f0e 50%, #1a1209 100%);
+    }
 
-<br>
+    .nav-link {
+      color: #c9a96e;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: color 0.2s ease, border-color 0.2s ease;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+    }
+    .nav-link:hover { color: #fff; border-color: #c9a96e; }
 
-<a href="/about">About</a> |
-<a href="/service">Detection</a> |
-<a href="/">Logout</a>
+    .logout-btn {
+      background: linear-gradient(135deg, #8B6A3E 0%, #6b4f2c 100%);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .logout-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(139,106,62,0.4);
+    }
+
+    .hero-badge {
+      background: rgba(201,169,110,0.12);
+      border: 1px solid rgba(201,169,110,0.3);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.65s ease forwards; }
+    .d1 { animation-delay: 0.05s; opacity: 0; }
+    .d2 { animation-delay: 0.15s; opacity: 0; }
+    .d3 { animation-delay: 0.25s; opacity: 0; }
+    .d4 { animation-delay: 0.35s; opacity: 0; }
+
+    .divider-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #d4c0a4, transparent);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#fdf8f2] flex flex-col">
+
+  <!-- Header -->
+  <header class="header-bar py-4 px-8 flex items-center justify-between shadow-lg relative z-10">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full border border-[#8B6A3E] flex items-center justify-center">
+        <div class="w-3 h-3 bg-[#c9a96e] rounded-full"></div>
+      </div>
+      <span class="display-font text-3xl font-black tracking-tight text-white">
+        Sign<span class="text-[#c9a96e]">Auth</span>
+      </span>
+    </div>
+
+    <!-- Nav Links -->
+    <nav class="flex items-center gap-8">
+      <a href="/about" class="nav-link">About</a>
+      <a href="/service" class="nav-link">Detection</a>
+      <a href="/" class="logout-btn text-white text-xs font-medium tracking-widest uppercase px-5 py-2 rounded-full shadow">
+        Logout →
+      </a>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="flex-1 relative noise-bg overflow-hidden flex items-center">
+
+    <!-- Decorative blobs -->
+    <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#8B6A3E] opacity-5 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 left-1/4 w-80 h-80 rounded-full bg-[#c9a96e] opacity-5 blur-3xl pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-8 py-16 w-full">
+
+      <!-- Hero Section -->
+      <div class="text-center">
+        <h1 class="fade-up d2 display-font text-5xl font-black text-[#1a1209] leading-tight mb-4">
+          AI Document<br/>
+          <span class="text-[#8B6A3E]">Verification</span> System
+        </h1>
+
+        <div class="divider-line w-24 mx-auto my-6 fade-up d3"></div>
+
+        <p class="fade-up d3 text-[#7a6a58] text-base leading-relaxed max-w-xl mx-auto">
+          This system detects forged images and signatures using state-of-the-art deep learning models — delivering fast, accurate, and reliable document authentication.
+        </p>
+
+        <!-- CTA -->
+        <div class="fade-up d4 flex items-center justify-center gap-4 mt-10">
+          <a href="/service" class="logout-btn text-white font-medium text-sm tracking-wide px-8 py-3 rounded-xl shadow-md inline-block">
+            Start Detection →
+          </a>
+          <a href="/about" class="text-sm font-medium text-[#8B6A3E] border border-[#c9a96e] px-8 py-3 rounded-xl hover:bg-[#8B6A3E] hover:text-white transition-all duration-200 inline-block">
+            Learn More
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="header-bar py-4 px-8 flex items-center justify-between relative z-10">
+    <span class="text-[#5a4a38] text-xs tracking-widest uppercase">© 2026 SignAuth</span>
+    <span class="text-[#5a4a38] text-xs">AI Document Verification System</span>
+  </footer>
 
 </body>
 </html>
