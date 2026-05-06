@@ -171,8 +171,8 @@
           <form action="/predict" method="post" enctype="multipart/form-data">
             <input type="hidden" name="mode" value="image">
             <div class="drop-zone relative rounded-xl flex flex-col items-center justify-center gap-2 py-8 mb-5" id="imageDropZone">
-              <input type="file" name="file" accept="image/*" required id="imageInput" onchange="updateLabel('imageInput','imageLabel')">
-              <svg class="w-8 h-8 text-[#c9a96e] mb-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <input type="file" name="file" accept="image/*,.tif,.tiff" required id="imageInput" onchange="updateLabel('imageInput','imageLabel')">
+                            <svg class="w-8 h-8 text-[#c9a96e] mb-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
               </svg>
               <p class="text-[#8B6A3E] text-sm font-medium" id="imageLabel">Click or drag to upload image</p>
