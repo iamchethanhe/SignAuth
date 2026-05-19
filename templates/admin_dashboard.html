@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Dashboard • SignAuth</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html,
+    body{
+
+      width:100%;
+      height:100%;
+    }
+
+    body{
+
+      font-family:'Poppins',sans-serif;
+
+      background:#f5f7fb;
+
+      color:#0f172a;
+
+      overflow-x:hidden;
+    }
+
+    /* ======================================
+       MAIN CONTAINER
+    ====================================== */
+
+    .container{
+
+      width:100%;
+
+      min-height:100vh;
+
+      padding:18px;
+    }
+
+    /* ======================================
+       HEADER
+    ====================================== */
+
+    .header{
+
+      width:100%;
+
+      min-height:90px;
+
+      background:white;
+
+      border-radius:28px;
+
+      display:flex;
+
+      align-items:center;
+
+      justify-content:space-between;
+
+      padding:20px 35px;
+
+      margin-bottom:30px;
+
+      box-shadow:
+      0 8px 25px rgba(15,23,42,0.05);
+    }
+
+    .logo{
+
+      font-size:48px;
+
+      font-weight:800;
+
+      color:#0f172a;
+    }
+
+    .logo span{
+
+      color:#38bdf8;
+    }
+
+    .header-right{
+
+      display:flex;
+
+      align-items:center;
+
+      gap:15px;
+    }
+
+    .admin-badge{
+
+      padding:14px 22px;
+
+      border-radius:16px;
+
+      background:#e0f2fe;
+
+      color:#0284c7;
+
+      font-size:14px;
+
+      font-weight:700;
+    }
+
+    .logout-btn{
+
+      width:150px;
+
+      height:54px;
+
+      border:none;
+
+      border-radius:16px;
+
+      background:#38bdf8;
+
+      color:white;
+
+      font-size:15px;
+
+      font-weight:700;
+
+      cursor:pointer;
+
+      transition:0.3s ease;
+    }
+
+    .logout-btn:hover{
+
+      background:#0ea5e9;
+
+      transform:translateY(-2px);
+    }
+
+    /* ======================================
+       TITLE
+    ====================================== */
+
+    .section-tag{
+
+      color:#38bdf8;
+
+      font-size:14px;
+
+      font-weight:700;
+
+      letter-spacing:0.15em;
+
+      text-transform:uppercase;
+
+      margin-bottom:14px;
+    }
+
+    .title{
+
+      font-size:72px;
+
+      font-weight:800;
+
+      margin-bottom:12px;
+
+      line-height:1;
+    }
+
+    .subtitle{
+
+      color:#64748b;
+
+      font-size:18px;
+
+      margin-bottom:40px;
+    }
+
+    /* ======================================
+       STATS
+    ====================================== */
+
+    .stats-grid{
+
+      display:grid;
+
+      grid-template-columns:repeat(4,1fr);
+
+      gap:22px;
+
+      margin-bottom:30px;
+    }
+
+    .stat-card{
+
+      background:white;
+
+      border-radius:28px;
+
+      padding:30px;
+
+      box-shadow:
+      0 8px 25px rgba(15,23,42,0.05);
+
+      transition:0.3s ease;
+    }
+
+    .stat-card:hover{
+
+      transform:translateY(-4px);
+    }
+
+    .stat-label{
+
+      color:#64748b;
+
+      font-size:15px;
+
+      margin-bottom:15px;
+    }
+
+    .stat-value{
+
+      font-size:48px;
+
+      font-weight:800;
+    }
+
+    .blue{
+      color:#38bdf8;
+    }
+
+    .green{
+      color:#10b981;
+    }
+
+    .red{
+      color:#ef4444;
+    }
+
+    .orange{
+      color:#f59e0b;
+    }
+
+    /* ======================================
+       CHARTS
+    ====================================== */
+
+    .chart-grid{
+
+      display:grid;
+
+      grid-template-columns:1fr 1fr;
+
+      gap:22px;
+
+      margin-bottom:30px;
+    }
+
+    .chart-card{
+
+      background:white;
+
+      border-radius:28px;
+
+      padding:30px;
+
+      box-shadow:
+      0 8px 25px rgba(15,23,42,0.05);
+    }
+
+    .chart-card h3{
+
+      font-size:30px;
+
+      font-weight:700;
+
+      margin-bottom:25px;
+    }
+
+    /* ======================================
+       TABLE
+    ====================================== */
+
+    .table-card{
+
+      width:100%;
+
+      background:white;
+
+      border-radius:28px;
+
+      overflow:hidden;
+
+      box-shadow:
+      0 8px 25px rgba(15,23,42,0.05);
+    }
+
+    .table-header{
+
+      padding:30px;
+
+      border-bottom:1px solid #e2e8f0;
+    }
+
+    .table-title{
+
+      font-size:32px;
+
+      font-weight:700;
+    }
+
+    .table-wrapper{
+
+      width:100%;
+
+      overflow-x:auto;
+    }
+
+    table{
+
+      width:100%;
+
+      border-collapse:collapse;
+    }
+
+    thead{
+
+      background:#f8fafc;
+    }
+
+    th{
+
+      text-align:left;
+
+      padding:22px;
+
+      font-size:14px;
+
+      color:#64748b;
+
+      font-weight:700;
+
+      white-space:nowrap;
+    }
+
+    td{
+
+      padding:22px;
+
+      border-top:1px solid #f1f5f9;
+
+      font-size:15px;
+
+      white-space:nowrap;
+    }
+
+    tbody tr{
+
+      transition:0.3s ease;
+    }
+
+    tbody tr:hover{
+
+      background:#f8fbff;
+    }
+
+    .success{
+
+      color:#10b981;
+
+      font-weight:700;
+    }
+
+    .danger{
+
+      color:#ef4444;
+
+      font-weight:700;
+    }
+
+    .type-badge{
+
+      background:#e0f2fe;
+
+      color:#0284c7;
+
+      padding:8px 14px;
+
+      border-radius:10px;
+
+      font-size:13px;
+
+      font-weight:700;
+    }
+
+    /* ======================================
+       MOBILE
+    ====================================== */
+
+    @media(max-width:1200px){
+
+      .stats-grid{
+
+        grid-template-columns:1fr 1fr;
+      }
+
+      .chart-grid{
+
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media(max-width:768px){
+
+      .container{
+
+        padding:12px;
+      }
+
+      .header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+
+        padding:25px;
+      }
+
+      .header-right{
+
+        width:100%;
+
+        justify-content:space-between;
+      }
+
+      .title{
+
+        font-size:46px;
+      }
+
+      .stats-grid{
+
+        grid-template-columns:1fr;
+      }
+
+      .logo{
+
+        font-size:38px;
+      }
+
+      .chart-card h3{
+
+        font-size:24px;
+      }
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+
+      <div class="logo">
+
+        Sign<span>Auth</span>
+
+      </div>
+
+      <div class="header-right">
+
+        <div class="admin-badge">
+
+          ADMIN PANEL
+
+        </div>
+
+        <a href="/logout">
+
+          <button class="logout-btn">
+
+            LOGOUT
+
+          </button>
+
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- TITLE -->
+    <div class="section-tag">
+
+      AI VERIFICATION SYSTEM
+
+    </div>
+
+    <h1 class="title">
+
+      Admin Dashboard
+
+    </h1>
+
+    <p class="subtitle">
+
+      Monitor AI verification analytics and detection activities
+
+    </p>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+
+      <div class="stat-card">
+
+        <div class="stat-label">
+
+          Total Detections
+
+        </div>
+
+        <div class="stat-value blue">
+
+          {{ history|length }}
+
+        </div>
+
+      </div>
+
+      <div class="stat-card">
+
+        <div class="stat-label">
+
+          System Status
+
+        </div>
+
+        <div class="stat-value green">
+
+          Active
+
+        </div>
+
+      </div>
+
+      <div class="stat-card">
+
+        <div class="stat-label">
+
+          Forged Files
+
+        </div>
+
+        <div class="stat-value red">
+
+          12
+
+        </div>
+
+      </div>
+
+      <div class="stat-card">
+
+        <div class="stat-label">
+
+          AI Engine
+
+        </div>
+
+        <div class="stat-value orange">
+
+          Online
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CHARTS -->
+    <div class="chart-grid">
+
+      <!-- PIE CHART -->
+      <div class="chart-card">
+
+        <h3>
+
+          Detection Distribution
+
+        </h3>
+
+        <canvas id="pieChart"></canvas>
+
+      </div>
+
+      <!-- BAR CHART -->
+      <div class="chart-card">
+
+        <h3>
+
+          Monthly Detections
+
+        </h3>
+
+        <canvas id="barChart"></canvas>
+
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+
+      <div class="table-header">
+
+        <div class="table-title">
+
+          Detection History
+
+        </div>
+
+      </div>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>ID</th>
+              <th>User</th>
+              <th>File</th>
+              <th>Type</th>
+              <th>Result</th>
+              <th>Tamper %</th>
+              <th>Confidence</th>
+              <th>Date</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            {% for row in history %}
+
+            <tr>
+
+              <td>{{ row[0] }}</td>
+
+              <td>{{ row[1] }}</td>
+
+              <td>{{ row[2] }}</td>
+
+              <td>
+
+                <span class="type-badge">
+
+                  {{ row[3] }}
+
+                </span>
+
+              </td>
+
+              <td>
+
+                {% if 'Tampered' in row[4] or 'Forged' in row[4] %}
+
+                <span class="danger">
+
+                  {{ row[4] }}
+
+                </span>
+
+                {% else %}
+
+                <span class="success">
+
+                  {{ row[4] }}
+
+                </span>
+
+                {% endif %}
+
+              </td>
+
+              <td>{{ row[5] }}%</td>
+
+              <td>{{ row[6] }}%</td>
+
+              <td>{{ row[7] }}</td>
+
+            </tr>
+
+            {% endfor %}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CHARTS -->
+  <script>
+
+    // PIE CHART
+
+    new Chart(
+
+      document.getElementById('pieChart'),
+
+      {
+
+        type:'pie',
+
+        data:{
+
+          labels:[
+            'Authentic',
+            'Tampered',
+            'Forged'
+          ],
+
+          datasets:[{
+
+            data:[45,30,25],
+
+            backgroundColor:[
+              '#10b981',
+              '#f59e0b',
+              '#ef4444'
+            ],
+
+            borderWidth:0
+          }]
+        }
+      }
+    );
+
+    // BAR CHART
+
+    new Chart(
+
+      document.getElementById('barChart'),
+
+      {
+
+        type:'bar',
+
+        data:{
+
+          labels:[
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun'
+          ],
+
+          datasets:[{
+
+            label:'Detections',
+
+            data:[12,19,14,25,30,18],
+
+            backgroundColor:'#38bdf8',
+
+            borderRadius:10
+          }]
+        },
+
+        options:{
+
+          responsive:true,
+
+          plugins:{
+
+            legend:{
+              display:false
+            }
+          },
+
+          scales:{
+
+            y:{
+              beginAtZero:true
+            }
+          }
+        }
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>

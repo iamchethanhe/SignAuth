@@ -1,134 +1,842 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
+
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Document Verification System</title>
+
+  <title>SignAuth</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
   <style>
-    body { font-family: 'DM Sans', sans-serif; }
-    .display-font { font-family: 'Playfair Display', serif; }
 
-    .noise-bg::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      scroll-behavior:smooth;
     }
 
-    .header-bar {
-      background: linear-gradient(90deg, #1a1209 0%, #2d1f0e 50%, #1a1209 100%);
+    html{
+
+      scroll-snap-type:y mandatory;
     }
 
-    .nav-link {
-      color: #c9a96e;
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      font-weight: 500;
-      transition: color 0.2s ease, border-color 0.2s ease;
-      border-bottom: 1px solid transparent;
-      padding-bottom: 2px;
-    }
-    .nav-link:hover { color: #fff; border-color: #c9a96e; }
+    body{
 
-    .logout-btn {
-      background: linear-gradient(135deg, #8B6A3E 0%, #6b4f2c 100%);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .logout-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(139,106,62,0.4);
+      font-family:'Poppins',sans-serif;
+
+      background:#f5f7fb;
+
+      overflow-x:hidden;
     }
 
-    .hero-badge {
-      background: rgba(201,169,110,0.12);
-      border: 1px solid rgba(201,169,110,0.3);
+    section{
+
+      scroll-snap-align:start;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade-up { animation: fadeUp 0.65s ease forwards; }
-    .d1 { animation-delay: 0.05s; opacity: 0; }
-    .d2 { animation-delay: 0.15s; opacity: 0; }
-    .d3 { animation-delay: 0.25s; opacity: 0; }
-    .d4 { animation-delay: 0.35s; opacity: 0; }
+    /* ======================================
+       HEADER
+    ====================================== */
 
-    .divider-line {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #d4c0a4, transparent);
+    .header{
+
+      width:100%;
+
+      height:85px;
+
+      background:white;
+
+      display:flex;
+
+      align-items:center;
+
+      justify-content:space-between;
+
+      padding:0 70px;
+
+      border-bottom:1px solid #e5e7eb;
+
+      position:fixed;
+
+      top:0;
+
+      left:0;
+
+      z-index:1000;
     }
+
+    .logo{
+
+      font-size:34px;
+
+      font-weight:800;
+
+      color:#0f172a;
+    }
+
+    .logo span{
+
+      color:#38bdf8;
+    }
+
+    .nav{
+
+      display:flex;
+
+      align-items:center;
+
+      gap:35px;
+    }
+
+    .nav a{
+
+      text-decoration:none;
+
+      color:#64748b;
+
+      font-size:15px;
+
+      font-weight:600;
+
+      transition:0.3s ease;
+    }
+
+    .nav a:hover{
+
+      color:#38bdf8;
+    }
+
+    .logout-btn{
+
+      width:140px;
+
+      height:50px;
+
+      border:none;
+
+      border-radius:14px;
+
+      background:#38bdf8;
+
+      color:white;
+
+      font-size:14px;
+
+      font-weight:700;
+
+      cursor:pointer;
+
+      transition:0.3s ease;
+    }
+
+    .logout-btn:hover{
+
+      background:#0ea5e9;
+
+      transform:translateY(-2px);
+    }
+
+    /* ======================================
+       COMMON SECTION
+    ====================================== */
+
+    .section{
+
+      width:100%;
+
+      height:100vh;
+
+      display:grid;
+
+      grid-template-columns:1fr 1fr;
+
+      align-items:center;
+
+      padding:120px 80px 60px;
+
+      overflow:hidden;
+    }
+
+    .light-bg{
+
+      background:#eef5fb;
+    }
+
+    .white-bg{
+
+      background:white;
+    }
+
+    /* ======================================
+       LEFT CONTENT
+    ====================================== */
+
+    .section-left h1{
+
+      font-size:72px;
+
+      line-height:1.08;
+
+      font-weight:800;
+
+      color:#0f172a;
+
+      margin-bottom:25px;
+
+      max-width:650px;
+    }
+
+    .section-left p{
+
+      font-size:18px;
+
+      line-height:1.9;
+
+      color:#64748b;
+
+      max-width:560px;
+
+      margin-bottom:40px;
+    }
+
+    .section-tag{
+
+      color:#38bdf8;
+
+      font-size:14px;
+
+      font-weight:700;
+
+      letter-spacing:0.12em;
+
+      text-transform:uppercase;
+
+      margin-bottom:18px;
+    }
+
+    .main-btn{
+
+      width:220px;
+
+      height:62px;
+
+      border:none;
+
+      border-radius:16px;
+
+      background:#38bdf8;
+
+      color:white;
+
+      font-size:16px;
+
+      font-weight:700;
+
+      cursor:pointer;
+
+      transition:0.3s ease;
+    }
+
+    .main-btn:hover{
+
+      background:#0ea5e9;
+
+      transform:translateY(-2px);
+    }
+
+    /* ======================================
+       RIGHT IMAGE
+    ====================================== */
+
+    .section-right{
+
+      display:flex;
+
+      align-items:center;
+
+      justify-content:center;
+    }
+
+    .floating-image{
+
+      width:100%;
+
+      max-width:620px;
+
+      animation:floatImage 4s ease-in-out infinite;
+    }
+
+    .floating-image img{
+
+      width:100%;
+
+      border-radius:28px;
+
+      object-fit:cover;
+
+      box-shadow:
+      0 18px 45px rgba(15,23,42,0.15);
+    }
+
+    @keyframes floatImage{
+
+      0%{
+        transform:translateY(0px);
+      }
+
+      50%{
+        transform:translateY(-18px);
+      }
+
+      100%{
+        transform:translateY(0px);
+      }
+    }
+
+    /* ======================================
+       FEATURES
+    ====================================== */
+
+    .features{
+
+      width:100%;
+
+      min-height:100vh;
+
+      background:#f8fbff;
+
+      padding:110px 80px;
+    }
+
+    .features-title{
+
+      text-align:center;
+
+      margin-bottom:60px;
+    }
+
+    .features-title h2{
+
+      font-size:58px;
+
+      font-weight:800;
+
+      color:#0f172a;
+
+      margin-bottom:18px;
+    }
+
+    .features-title p{
+
+      color:#64748b;
+
+      font-size:17px;
+    }
+
+    .feature-grid{
+
+      width:100%;
+
+      max-width:1300px;
+
+      margin:auto;
+
+      display:grid;
+
+      grid-template-columns:repeat(3,1fr);
+
+      gap:30px;
+    }
+
+    .feature-box{
+
+      background:white;
+
+      border-radius:28px;
+
+      padding:25px;
+
+      transition:0.3s ease;
+
+      border:1px solid #e2e8f0;
+    }
+
+    .feature-box:hover{
+
+      transform:translateY(-5px);
+
+      box-shadow:
+      0 14px 30px rgba(15,23,42,0.08);
+    }
+
+    .feature-image{
+
+      width:100%;
+
+      height:220px;
+
+      border-radius:22px;
+
+      overflow:hidden;
+
+      margin-bottom:24px;
+    }
+
+    .feature-image img{
+
+      width:100%;
+
+      height:100%;
+
+      object-fit:cover;
+
+      transition:0.4s ease;
+    }
+
+    .feature-box:hover .feature-image img{
+
+      transform:scale(1.05);
+    }
+
+    .feature-box h3{
+
+      font-size:24px;
+
+      font-weight:700;
+
+      color:#0f172a;
+
+      margin-bottom:14px;
+    }
+
+    .feature-box p{
+
+      color:#64748b;
+
+      font-size:15px;
+
+      line-height:1.9;
+    }
+
+    /* ======================================
+       FOOTER
+    ====================================== */
+
+    .footer{
+
+      width:100%;
+
+      min-height:80px;
+
+      background:white;
+
+      border-top:1px solid #e5e7eb;
+
+      display:flex;
+
+      align-items:center;
+
+      justify-content:space-between;
+
+      padding:0 70px;
+
+      color:#64748b;
+
+      font-size:14px;
+    }
+
+    /* ======================================
+       MOBILE
+    ====================================== */
+
+    @media(max-width:1100px){
+
+      html{
+
+        scroll-snap-type:none;
+      }
+
+      .section{
+
+        grid-template-columns:1fr;
+
+        height:auto;
+
+        gap:60px;
+      }
+
+      .feature-grid{
+
+        grid-template-columns:1fr;
+      }
+
+      .section-left h1{
+
+        font-size:50px;
+      }
+
+      .features-title h2{
+
+        font-size:42px;
+      }
+
+    }
+
+    @media(max-width:768px){
+
+      .header{
+
+        padding:20px 25px;
+
+        flex-direction:column;
+
+        height:auto;
+
+        gap:20px;
+      }
+
+      .section{
+
+        padding:170px 25px 60px;
+      }
+
+      .features{
+
+        padding:80px 25px;
+      }
+
+      .footer{
+
+        padding:20px;
+
+        height:auto;
+
+        flex-direction:column;
+
+        gap:10px;
+      }
+
+      .nav{
+
+        gap:20px;
+      }
+
+      .section-left h1{
+
+        font-size:38px;
+      }
+
+    }
+
   </style>
-</head>
-<body class="min-h-screen bg-[#fdf8f2] flex flex-col">
 
-  <!-- Header -->
-  <header class="header-bar py-4 px-8 flex items-center justify-between shadow-lg relative z-10">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-full border border-[#8B6A3E] flex items-center justify-center">
-        <div class="w-3 h-3 bg-[#c9a96e] rounded-full"></div>
-      </div>
-      <span class="display-font text-3xl font-black tracking-tight text-white">
-        Sign<span class="text-[#c9a96e]">Auth</span>
-      </span>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+
+    <div class="logo">
+
+      Sign<span>Auth</span>
+
     </div>
 
-    <!-- Nav Links -->
-    <nav class="flex items-center gap-8">
-      <a href="/about" class="nav-link">About</a>
-      <a href="/service" class="nav-link">Detection</a>
-      <a href="/" class="logout-btn text-white text-xs font-medium tracking-widest uppercase px-5 py-2 rounded-full shadow">
-        Logout →
+    <nav class="nav">
+
+      <a href="#about">
+
+        About
+
       </a>
+
+      <a href="#features">
+
+        Features
+
+      </a>
+
+      <a href="#detection">
+
+        Detection
+
+      </a>
+
+      <a href="/logout">
+
+        <button class="logout-btn">
+
+          LOGOUT
+
+        </button>
+
+      </a>
+
     </nav>
+
   </header>
 
-  <!-- Main -->
-  <main class="flex-1 relative noise-bg overflow-hidden flex items-center">
+  <!-- HERO -->
+  <section class="section light-bg">
 
-    <!-- Decorative blobs -->
-    <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#8B6A3E] opacity-5 blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-0 left-1/4 w-80 h-80 rounded-full bg-[#c9a96e] opacity-5 blur-3xl pointer-events-none"></div>
+    <div class="section-left">
 
-    <div class="relative z-10 max-w-5xl mx-auto px-8 py-16 w-full">
+      <div class="section-tag">
 
-      <!-- Hero Section -->
-      <div class="text-center">
-        <h1 class="fade-up d2 display-font text-5xl font-black text-[#1a1209] leading-tight mb-4">
-          AI Document<br/>
-          <span class="text-[#8B6A3E]">Verification</span> System
-        </h1>
+        AI Verification System
 
-        <div class="divider-line w-24 mx-auto my-6 fade-up d3"></div>
+      </div>
 
-        <p class="fade-up d3 text-[#7a6a58] text-base leading-relaxed max-w-xl mx-auto">
-          This system detects forged images and signatures using state-of-the-art deep learning models — delivering fast, accurate, and reliable document authentication.
-        </p>
+      <h1>
 
-        <!-- CTA -->
-        <div class="fade-up d4 flex items-center justify-center gap-4 mt-10">
-          <a href="/service" class="logout-btn text-white font-medium text-sm tracking-wide px-8 py-3 rounded-xl shadow-md inline-block">
-            Start Detection →
-          </a>
-          <a href="/about" class="text-sm font-medium text-[#8B6A3E] border border-[#c9a96e] px-8 py-3 rounded-xl hover:bg-[#8B6A3E] hover:text-white transition-all duration-200 inline-block">
-            Learn More
-          </a>
-        </div>
+        Secure Your Documents With AI Verification
+
+      </h1>
+
+      <p>
+
+        Detect forged signatures and manipulated images using advanced deep learning algorithms designed for modern authentication systems.
+
+      </p>
+
+      <a href="/service">
+
+        <button class="main-btn">
+
+          Start Detection
+
+        </button>
+
+      </a>
+
+    </div>
+
+    <div class="section-right">
+
+      <div class="floating-image">
+
+        <!-- HERO IMAGE -->
+        <img src="{{ url_for('static', filename='images/ai.png') }}" alt="AI Verification">
+
       </div>
 
     </div>
-  </main>
 
-  <!-- Footer -->
-  <footer class="header-bar py-4 px-8 flex items-center justify-between relative z-10">
-    <span class="text-[#5a4a38] text-xs tracking-widest uppercase">© 2026 SignAuth</span>
-    <span class="text-[#5a4a38] text-xs">AI Document Verification System</span>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section white-bg" id="about">
+
+    <div class="section-right">
+
+      <div class="floating-image">
+
+        <!-- ABOUT IMAGE -->
+        <img src="{{ url_for('static', filename='images/about.png') }}" alt="About">
+
+      </div>
+
+    </div>
+
+    <div class="section-left">
+
+      <div class="section-tag">
+
+        About Us
+
+      </div>
+
+      <h1>
+
+        Leading The Future Of AI Authentication
+
+      </h1>
+
+      <p>
+
+        SignAuth helps organisations and individuals verify document authenticity using intelligent AI powered systems.
+
+      </p>
+
+      <p>
+
+        Our platform analyses signatures, detects image tampering, and generates accurate verification reports instantly.
+
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+
+    <div class="features-title">
+
+      <h2>
+
+        Core Features
+
+      </h2>
+
+      <p>
+
+        Intelligent document verification powered by deep learning
+
+      </p>
+
+    </div>
+
+    <div class="feature-grid">
+
+      <!-- FEATURE 1 -->
+      <div class="feature-box">
+
+        <div class="feature-image">
+
+          <img src="{{ url_for('static', filename='images/detect.png') }}" alt="Detection">
+
+        </div>
+
+        <h3>
+
+          Image Detection
+
+        </h3>
+
+        <p>
+
+          Detect forged or manipulated regions in documents using AI analysis.
+
+        </p>
+
+      </div>
+
+      <!-- FEATURE 2 -->
+      <div class="feature-box">
+
+        <div class="feature-image">
+
+          <img src="{{ url_for('static', filename='images/signature.png') }}" alt="Signature">
+
+        </div>
+
+        <h3>
+
+          Signature Verification
+
+        </h3>
+
+        <p>
+
+          Verify handwritten signatures with advanced AI stroke analysis.
+
+        </p>
+
+      </div>
+
+      <!-- FEATURE 3 -->
+      <div class="feature-box">
+
+        <div class="feature-image">
+
+          <img src="{{ url_for('static', filename='images/results.png') }}" alt="Results">
+
+        </div>
+
+        <h3>
+
+          Fast Results
+
+        </h3>
+
+        <p>
+
+          Generate real-time authentication reports and verification instantly.
+
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- DETECTION -->
+  <section class="section white-bg" id="detection">
+
+    <div class="section-left">
+
+      <div class="section-tag">
+
+        Detection System
+
+      </div>
+
+      <h1>
+
+        Upload & Verify Documents
+
+      </h1>
+
+      <p>
+
+        Analyse document authenticity, detect forged regions, and verify handwritten signatures using AI powered deep learning systems.
+
+      </p>
+
+      <a href="/service">
+
+        <button class="main-btn">
+
+          Open Detection
+
+        </button>
+
+      </a>
+
+    </div>
+
+    <div class="section-right">
+
+      <div class="floating-image">
+
+        <!-- DETECTION IMAGE -->
+        <img src="{{ url_for('static', filename='images/detection.png') }}" alt="Detection">
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+
+    <span>
+
+      © 2026 SignAuth
+
+    </span>
+
+    <span>
+
+      AI Document Verification System
+
+    </span>
+
   </footer>
 
 </body>
+
 </html>

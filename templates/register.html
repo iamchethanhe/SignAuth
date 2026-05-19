@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Login • SignAuth</title>
+  <title>Register • SignAuth</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -72,7 +72,50 @@
       padding:30px 40px;
 
       gap:35px;
+
+      position:relative;
     }
+
+    /* ======================================
+       BACK BUTTON
+    ====================================== */
+
+    .back-btn{
+
+      position:absolute;
+
+      top:30px;
+
+      left:30px;
+
+      width:56px;
+
+      height:56px;
+
+      border-radius:18px;
+
+      background:white;
+
+      display:flex;
+
+      align-items:center;
+
+      justify-content:center;
+
+      transition:0.3s ease;
+
+      box-shadow:
+      0 10px 30px rgba(15,23,42,0.10);
+    }
+
+    .back-btn:hover{
+
+      transform:translateY(-2px);
+    }
+
+    /* ======================================
+       LOGO
+    ====================================== */
 
     .brand{
 
@@ -99,6 +142,10 @@
 
       color:#38bdf8;
     }
+
+    /* ======================================
+       IMAGE
+    ====================================== */
 
     .image-wrapper{
 
@@ -188,60 +235,35 @@
       width:100%;
 
       max-width:430px;
-
-      display:flex;
-
-      flex-direction:column;
-
-      justify-content:center;
     }
 
-    .form-box h1{
+    .form-box h2{
 
-      font-size:72px;
+      font-size:68px;
 
       font-weight:800;
 
       color:#0f172a;
 
-      text-align:center;
-
       margin-bottom:10px;
 
-      line-height:1;
+      text-align:center;
     }
 
     .sub-text{
-
-      text-align:center;
 
       color:#64748b;
 
       font-size:16px;
 
       margin-bottom:35px;
+
+      text-align:center;
     }
 
     /* ======================================
-       ALERTS
+       ALERT
     ====================================== */
-
-    .success-box{
-
-      background:#ecfdf3;
-
-      border:1px solid #bbf7d0;
-
-      color:#166534;
-
-      padding:14px;
-
-      border-radius:14px;
-
-      margin-bottom:18px;
-
-      font-size:14px;
-    }
 
     .error-box{
 
@@ -266,7 +288,7 @@
 
     .input-group{
 
-      margin-bottom:20px;
+      margin-bottom:18px;
     }
 
     .input-box{
@@ -303,11 +325,18 @@
       color:#94a3b8;
     }
 
+    select.input-box{
+
+      appearance:none;
+
+      cursor:pointer;
+    }
+
     /* ======================================
        BUTTON
     ====================================== */
 
-    .login-btn{
+    .register-btn{
 
       width:100%;
 
@@ -329,10 +358,10 @@
 
       transition:0.3s ease;
 
-      margin-top:5px;
+      margin-top:8px;
     }
 
-    .login-btn:hover{
+    .register-btn:hover{
 
       background:#0ea5e9;
 
@@ -358,14 +387,23 @@
 
       color:#38bdf8;
 
-      font-weight:700;
-
       text-decoration:none;
+
+      font-weight:700;
     }
 
     .footer-text a:hover{
 
       text-decoration:underline;
+    }
+
+    /* ======================================
+       SECRET KEY
+    ====================================== */
+
+    #secretKeyDiv{
+
+      display:none;
     }
 
     /* ======================================
@@ -408,7 +446,7 @@
         padding:55px 25px;
       }
 
-      .form-box h1{
+      .form-box h2{
 
         font-size:52px;
       }
@@ -425,17 +463,40 @@
     <!-- LEFT SIDE -->
     <div class="left-side">
 
+      <!-- BACK -->
+      <a href="/" class="back-btn">
+
+        <svg
+          class="w-6 h-6 text-slate-900"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          viewBox="0 0 24 24"
+        >
+
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19l-7-7 7-7"
+          />
+
+        </svg>
+
+      </a>
+
+      <!-- LOGO -->
       <div class="brand">
 
         Sign<span>Auth</span>
 
       </div>
 
+      <!-- IMAGE -->
       <div class="image-wrapper">
 
         <img
-          src="{{ url_for('static', filename='images/login.png') }}"
-          alt="Login Image"
+          src="{{ url_for('static', filename='images/register.png') }}"
+          alt="Register Image"
           class="bg-image"
         >
 
@@ -448,28 +509,17 @@
 
       <div class="form-box">
 
-        <h1>
+        <h2>
 
-          Sign In
+          Register
 
-        </h1>
+        </h2>
 
         <p class="sub-text">
 
-          Login to continue
+          Create your account
 
         </p>
-
-        <!-- SUCCESS -->
-        {% if success %}
-
-        <div class="success-box">
-
-          {{ success }}
-
-        </div>
-
-        {% endif %}
 
         <!-- ERROR -->
         {% if error %}
@@ -483,7 +533,20 @@
         {% endif %}
 
         <!-- FORM -->
-        <form action="/login" method="POST">
+        <form action="/register_user" method="POST">
+
+          <!-- FULL NAME -->
+          <div class="input-group">
+
+            <input
+              type="text"
+              name="fullname"
+              required
+              placeholder="Full Name"
+              class="input-box"
+            >
+
+          </div>
 
           <!-- EMAIL -->
           <div class="input-group">
@@ -511,13 +574,55 @@
 
           </div>
 
+          <!-- ROLE -->
+          <div class="input-group">
+
+            <select
+              name="role"
+              id="role"
+              onchange="toggleSecretKey()"
+              class="input-box"
+            >
+
+              <option value="user">
+
+                User Account
+
+              </option>
+
+              <option value="admin">
+
+                Admin Account
+
+              </option>
+
+            </select>
+
+          </div>
+
+          <!-- SECRET KEY -->
+          <div id="secretKeyDiv">
+
+            <div class="input-group">
+
+              <input
+                type="text"
+                name="secret_key"
+                placeholder="Admin Secret Key"
+                class="input-box"
+              >
+
+            </div>
+
+          </div>
+
           <!-- BUTTON -->
           <button
             type="submit"
-            class="login-btn"
+            class="register-btn"
           >
 
-            LOGIN
+            CREATE ACCOUNT
 
           </button>
 
@@ -526,11 +631,11 @@
         <!-- FOOTER -->
         <div class="footer-text">
 
-          Don’t have an account?
+          Already have an account?
 
-          <a href="/register">
+          <a href="/">
 
-            Register
+            Login
 
           </a>
 
@@ -541,6 +646,27 @@
     </div>
 
   </div>
+
+  <script>
+
+    function toggleSecretKey(){
+
+      const role = document.getElementById("role").value;
+
+      const secretDiv = document.getElementById("secretKeyDiv");
+
+      if(role === "admin"){
+
+        secretDiv.style.display = "block";
+      }
+
+      else{
+
+        secretDiv.style.display = "none";
+      }
+    }
+
+  </script>
 
 </body>
 

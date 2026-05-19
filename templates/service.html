@@ -1,265 +1,543 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Detection – SignAuth</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <style>
-    body { font-family: 'DM Sans', sans-serif; }
-    .display-font { font-family: 'Playfair Display', serif; }
 
-    .noise-bg::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-    }
+    <meta charset="UTF-8">
 
-    .header-bar {
-      background: linear-gradient(90deg, #1a1209 0%, #2d1f0e 50%, #1a1209 100%);
-    }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .nav-link {
-      color: #c9a96e;
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      font-weight: 500;
-      transition: color 0.2s ease, border-color 0.2s ease;
-      border-bottom: 1px solid transparent;
-      padding-bottom: 2px;
-    }
-    .nav-link:hover { color: #fff; border-color: #c9a96e; }
-    .nav-link.active { color: #fff; border-color: #c9a96e; }
+    <title>AI Detection • SignAuth</title>
 
-    .logout-btn {
-      background: linear-gradient(135deg, #8B6A3E 0%, #6b4f2c 100%);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .logout-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(139,106,62,0.4);
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade-up { animation: fadeUp 0.65s ease forwards; }
-    .d1 { animation-delay: 0.05s; opacity: 0; }
-    .d2 { animation-delay: 0.15s; opacity: 0; }
-    .d3 { animation-delay: 0.25s; opacity: 0; }
-    .d4 { animation-delay: 0.35s; opacity: 0; }
-    .d5 { animation-delay: 0.45s; opacity: 0; }
+    <style>
 
-    .divider-line {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #d4c0a4, transparent);
-    }
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
 
-    .upload-card {
-      background: rgba(255,255,255,0.65);
-      border: 1px solid rgba(201,169,110,0.25);
-      backdrop-filter: blur(8px);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-    .upload-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(139,106,62,0.12);
-      border-color: rgba(201,169,110,0.5);
-    }
+        html,body{
+            width:100%;
+            overflow-x:hidden;
+            font-family:'Poppins',sans-serif;
+            background:#f5f7fb;
+            color:#0f172a;
+        }
 
-    .drop-zone {
-      border: 2px dashed rgba(201,169,110,0.4);
-      background: rgba(201,169,110,0.04);
-      transition: border-color 0.2s, background 0.2s;
-      cursor: pointer;
-    }
-    .drop-zone:hover, .drop-zone.dragover {
-      border-color: #8B6A3E;
-      background: rgba(139,106,62,0.07);
-    }
+        body{
+            width:100%;
+        }
 
-    /* Hide default file input */
-    input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-    }
+        /* =====================================
+           NAVBAR
+        ===================================== */
 
-    .submit-btn {
-      background: linear-gradient(135deg, #8B6A3E 0%, #6b4f2c 100%);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .submit-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(139,106,62,0.4);
-    }
+        .navbar{
+            width:100%;
+            background:white;
+            border-bottom:1px solid #e2e8f0;
+            padding:25px 70px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+        }
 
-    .result-card {
-      background: rgba(255,255,255,0.8);
-      border: 1px solid rgba(201,169,110,0.35);
-      backdrop-filter: blur(10px);
-    }
-  </style>
+        .logo{
+            font-size:58px;
+            font-weight:800;
+            color:#0f172a;
+        }
+
+        .logo span{
+            color:#38bdf8;
+        }
+
+        .nav-links{
+            display:flex;
+            align-items:center;
+            gap:45px;
+        }
+
+        .nav-links a{
+            text-decoration:none;
+            color:#64748b;
+            font-size:20px;
+            font-weight:600;
+        }
+
+        .logout-btn{
+            width:170px;
+            height:62px;
+            border:none;
+            border-radius:18px;
+            background:#38bdf8;
+            color:white;
+            font-size:18px;
+            font-weight:700;
+            cursor:pointer;
+        }
+
+        /* =====================================
+           MAIN
+        ===================================== */
+
+        .container{
+            width:100%;
+            padding:60px;
+        }
+
+        .top-text{
+            text-align:center;
+            margin-bottom:60px;
+        }
+
+        .tag{
+            color:#38bdf8;
+            font-size:15px;
+            font-weight:700;
+            letter-spacing:4px;
+            margin-bottom:18px;
+        }
+
+        .title{
+            font-size:92px;
+            font-weight:800;
+            line-height:1.1;
+            margin-bottom:25px;
+        }
+
+        .subtitle{
+            font-size:24px;
+            color:#64748b;
+            line-height:1.7;
+        }
+
+        /* =====================================
+           CARDS
+        ===================================== */
+
+        .cards{
+            width:100%;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:40px;
+        }
+
+        .card{
+            background:white;
+            border-radius:35px;
+            padding:45px;
+            box-shadow:0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        .card-title{
+            text-align:center;
+            font-size:52px;
+            font-weight:800;
+            margin-bottom:35px;
+        }
+
+        .upload-box{
+            width:100%;
+            border:4px dashed #93c5fd;
+            border-radius:30px;
+            padding:70px 30px;
+            text-align:center;
+            margin-bottom:30px;
+        }
+
+        .upload-box h3{
+            font-size:34px;
+            margin-bottom:12px;
+        }
+
+        .upload-box p{
+            color:#64748b;
+            font-size:18px;
+            margin-bottom:25px;
+        }
+
+        .upload-box input{
+            font-size:17px;
+        }
+
+        .btn{
+            width:100%;
+            height:72px;
+            border:none;
+            border-radius:20px;
+            background:#38bdf8;
+            color:white;
+            font-size:22px;
+            font-weight:700;
+            cursor:pointer;
+        }
+
+        /* =====================================
+           RESULT
+        ===================================== */
+
+        .result-box{
+            width:100%;
+            background:white;
+            margin-top:70px;
+            border-radius:35px;
+            padding:60px;
+            text-align:center;
+            box-shadow:0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        .result-title{
+            font-size:72px;
+            font-weight:800;
+            margin-bottom:25px;
+        }
+
+        .percentage{
+            font-size:100px;
+            font-weight:800;
+            color:#ef4444;
+            margin-top:25px;
+        }
+
+        .confidence{
+            font-size:26px;
+            color:#64748b;
+            margin-top:15px;
+        }
+
+        .download-btn{
+            width:360px;
+            height:75px;
+            border:none;
+            border-radius:20px;
+            background:#38bdf8;
+            color:white;
+            font-size:22px;
+            font-weight:700;
+            margin-top:40px;
+            cursor:pointer;
+        }
+
+        /* =====================================
+           IMAGES
+        ===================================== */
+
+        .images-grid{
+            margin-top:60px;
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:35px;
+        }
+
+        .image-card{
+            background:#f8fafc;
+            border-radius:30px;
+            padding:25px;
+        }
+
+        .image-card h2{
+            text-align:center;
+            margin-bottom:20px;
+            font-size:34px;
+            font-weight:700;
+        }
+
+        .image-card img{
+            width:100%;
+            height:420px;
+            object-fit:cover;
+            border-radius:22px;
+        }
+
+        /* =====================================
+           MOBILE
+        ===================================== */
+
+        @media(max-width:1200px){
+
+            .cards{
+                grid-template-columns:1fr;
+            }
+
+            .images-grid{
+                grid-template-columns:1fr;
+            }
+
+            .title{
+                font-size:60px;
+            }
+        }
+
+        @media(max-width:768px){
+
+            .navbar{
+                flex-direction:column;
+                gap:20px;
+                padding:25px;
+            }
+
+            .nav-links{
+                gap:20px;
+                flex-wrap:wrap;
+                justify-content:center;
+            }
+
+            .logo{
+                font-size:42px;
+            }
+
+            .container{
+                padding:25px;
+            }
+
+            .title{
+                font-size:46px;
+            }
+
+            .subtitle{
+                font-size:18px;
+            }
+
+            .card{
+                padding:25px;
+            }
+
+            .card-title{
+                font-size:34px;
+            }
+
+            .upload-box{
+                padding:40px 20px;
+            }
+
+            .upload-box h3{
+                font-size:24px;
+            }
+
+            .btn{
+                font-size:18px;
+                height:60px;
+            }
+
+            .result-title{
+                font-size:38px;
+            }
+
+            .percentage{
+                font-size:60px;
+            }
+
+            .download-btn{
+                width:100%;
+            }
+
+            .image-card img{
+                height:280px;
+            }
+        }
+
+    </style>
+
 </head>
-<body class="min-h-screen bg-[#fdf8f2] flex flex-col">
 
-  <!-- Header -->
-  <header class="header-bar py-4 px-8 flex items-center justify-between shadow-lg relative z-10">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-full border border-[#8B6A3E] flex items-center justify-center">
-        <div class="w-3 h-3 bg-[#c9a96e] rounded-full"></div>
-      </div>
-      <span class="display-font text-3xl font-black tracking-tight text-white">
-        Sign<span class="text-[#c9a96e]">Auth</span>
-      </span>
-    </div>
-    <nav class="flex items-center gap-8">
-      <a href="/about" class="nav-link">About</a>
-      <a href="/service" class="nav-link active">Detection</a>
-      <a href="/" class="logout-btn text-white text-xs font-medium tracking-widest uppercase px-5 py-2 rounded-full shadow">
-        Logout →
-      </a>
-    </nav>
-  </header>
+<body>
 
-  <!-- Main -->
-  <main class="flex-1 relative noise-bg overflow-hidden">
+    <!-- NAVBAR -->
 
-    <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#8B6A3E] opacity-5 blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-0 left-1/4 w-80 h-80 rounded-full bg-[#c9a96e] opacity-5 blur-3xl pointer-events-none"></div>
+    <div class="navbar">
 
-    <div class="relative z-10 max-w-4xl mx-auto px-8 py-14 w-full">
-
-      <!-- Title -->
-      <div class="text-center mb-4">
-        <h1 class="fade-up d1 display-font text-5xl font-black text-[#1a1209] leading-tight">
-          Document <span class="text-[#8B6A3E]">Detection</span>
-        </h1>
-      </div>
-      <div class="divider-line w-24 mx-auto mb-5 fade-up d1"></div>
-      <p class="fade-up d2 text-[#7a6a58] text-base leading-relaxed max-w-lg mx-auto text-center mb-10">
-        Upload a document or signature below to run our deep learning forgery analysis.
-      </p>
-
-      <!-- Two Upload Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-
-        <!-- Image Forgery -->
-        <div class="fade-up d3 upload-card rounded-2xl p-7">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-md" style="background: linear-gradient(135deg, #8B6A3E 0%, #6b4f2c 100%);">
-              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                <circle cx="8.5" cy="8.5" r="1.5"/>
-                <polyline points="21 15 16 10 5 21"/>
-              </svg>
-            </div>
-            <h3 class="display-font text-xl font-bold text-[#1a1209]">Image Forgery Detection</h3>
-          </div>
-          <p class="text-[#7a6a58] text-sm mb-5 leading-relaxed">
-            Upload a document image to detect manipulated or tampered regions.
-          </p>
-          <form action="/predict" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="mode" value="image">
-            <div class="drop-zone relative rounded-xl flex flex-col items-center justify-center gap-2 py-8 mb-5" id="imageDropZone">
-              <input type="file" name="file" accept="image/*,.tif,.tiff" required id="imageInput" onchange="updateLabel('imageInput','imageLabel')">
-                            <svg class="w-8 h-8 text-[#c9a96e] mb-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
-              </svg>
-              <p class="text-[#8B6A3E] text-sm font-medium" id="imageLabel">Click or drag to upload image</p>
-              <p class="text-[#b0a090] text-xs">PNG, JPG, JPEG supported</p>
-            </div>
-            <button type="submit" class="submit-btn w-full text-white font-medium text-sm tracking-wide py-3 rounded-xl shadow-md">
-              Check Image →
-            </button>
-          </form>
+        <div class="logo">
+            Sign<span>Auth</span>
         </div>
 
-        <!-- Signature Verification -->
-        <div class="fade-up d4 upload-card rounded-2xl p-7">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-md" style="background: linear-gradient(135deg, #8B6A3E 0%, #6b4f2c 100%);">
-              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487z"/>
-              </svg>
-            </div>
-            <h3 class="display-font text-xl font-bold text-[#1a1209]">Signature Verification</h3>
-          </div>
-          <p class="text-[#7a6a58] text-sm mb-5 leading-relaxed">
-            Upload a signature image to verify its authenticity against known patterns.
-          </p>
-          <form action="/predict" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="mode" value="signature">
-            <div class="drop-zone relative rounded-xl flex flex-col items-center justify-center gap-2 py-8 mb-5" id="sigDropZone">
-              <input type="file" name="file" accept="image/*" required id="sigInput" onchange="updateLabel('sigInput','sigLabel')">
-              <svg class="w-8 h-8 text-[#c9a96e] mb-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
-              </svg>
-              <p class="text-[#8B6A3E] text-sm font-medium" id="sigLabel">Click or drag to upload signature</p>
-              <p class="text-[#b0a090] text-xs">PNG, JPG, JPEG supported</p>
-            </div>
-            <button type="submit" class="submit-btn w-full text-white font-medium text-sm tracking-wide py-3 rounded-xl shadow-md">
-              Check Signature →
-            </button>
-          </form>
+        <div class="nav-links">
+
+            <a href="/about">About</a>
+
+            <a href="/home">Features</a>
+
+            <a href="/service">Detection</a>
+
+            <a href="/logout">
+
+                <button class="logout-btn">
+                    LOGOUT
+                </button>
+
+            </a>
+
         </div>
-
-      </div>
-
-      <!-- Result Section (Jinja2 conditional) -->
-      {% if result %}
-      <div class="fade-up d5 result-card rounded-2xl p-8 text-center mb-8">
-        <p class="text-[#c9a96e] text-xs font-medium tracking-[0.2em] uppercase mb-3">Analysis Result</p>
-        <h3 class="display-font text-2xl font-bold text-[#1a1209] mb-6">{{ result }}</h3>
-        <div class="flex justify-center">
-          <img src="{{ url_for('static', filename=img_path) }}"
-               class="rounded-xl shadow-lg border border-[rgba(201,169,110,0.3)] max-w-xs w-full object-contain"
-               alt="Result Image">
-        </div>
-      </div>
-      {% endif %}
-
-      <!-- Back -->
-      <div class="fade-up d5 flex justify-center">
-        <a href="/home" class="text-sm font-medium text-[#8B6A3E] border border-[#c9a96e] px-8 py-3 rounded-xl hover:bg-[#8B6A3E] hover:text-white transition-all duration-200 inline-block">
-          ← Back to Home
-        </a>
-      </div>
 
     </div>
-  </main>
 
-  <!-- Footer -->
-  <footer class="header-bar py-4 px-8 flex items-center justify-between relative z-10">
-    <span class="text-[#5a4a38] text-xs tracking-widest uppercase">© 2026 SignAuth</span>
-    <span class="text-[#5a4a38] text-xs">AI Document Verification System</span>
-  </footer>
+    <!-- MAIN -->
 
-  <script>
-    function updateLabel(inputId, labelId) {
-      const input = document.getElementById(inputId);
-      const label = document.getElementById(labelId);
-      if (input.files && input.files[0]) {
-        label.textContent = input.files[0].name;
-      }
-    }
+    <div class="container">
 
-    // Drag-over visual feedback
-    document.querySelectorAll('.drop-zone').forEach(zone => {
-      zone.addEventListener('dragover', () => zone.classList.add('dragover'));
-      zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
-      zone.addEventListener('drop', () => zone.classList.remove('dragover'));
-    });
-  </script>
+        <div class="top-text">
+
+            <div class="tag">
+                AI DOCUMENT FORENSICS
+            </div>
+
+            <div class="title">
+                AI Detection System
+            </div>
+
+            <div class="subtitle">
+                Analyze images and signatures using advanced AI powered verification systems
+            </div>
+
+        </div>
+
+        <!-- CARDS -->
+
+        <div class="cards">
+
+            <!-- IMAGE -->
+
+            <div class="card">
+
+                <div class="card-title">
+                    Image Forgery Detection
+                </div>
+
+                <form action="/predict" method="POST" enctype="multipart/form-data">
+
+                    <input type="hidden" name="mode" value="image">
+
+                    <div class="upload-box">
+
+                        <h3>Upload Image</h3>
+
+                        <p>JPG, PNG, JPEG Supported</p>
+
+                        <input type="file" name="file" required>
+
+                    </div>
+
+                    <button class="btn">
+                        CHECK IMAGE
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- SIGNATURE -->
+
+            <div class="card">
+
+                <div class="card-title">
+                    Signature Verification
+                </div>
+
+                <form action="/predict" method="POST" enctype="multipart/form-data">
+
+                    <input type="hidden" name="mode" value="signature">
+
+                    <div class="upload-box">
+
+                        <h3>Upload Signature</h3>
+
+                        <p>JPG, PNG, JPEG Supported</p>
+
+                        <input type="file" name="file" required>
+
+                    </div>
+
+                    <button class="btn">
+                        VERIFY SIGNATURE
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- RESULT -->
+
+        {% if result %}
+
+        <div class="result-box">
+
+            <div class="tag">
+                ANALYSIS RESULT
+            </div>
+
+            <div class="result-title">
+                {{ result }}
+            </div>
+
+            <div class="percentage">
+                {{ percentage }}%
+            </div>
+
+            <div class="confidence">
+                Confidence : {{ confidence }}%
+            </div>
+
+            <a href="/download_report">
+
+                <button class="download-btn">
+                    DOWNLOAD PDF REPORT
+                </button>
+
+            </a>
+
+            <!-- IMAGES -->
+
+            <div class="images-grid">
+
+                <!-- ORIGINAL -->
+
+                <div class="image-card">
+
+                    <h2>Original Image</h2>
+
+                    {% if filename %}
+                    <img src="{{ url_for('static', filename='uploads/' + filename) }}">
+                    {% endif %}
+
+                </div>
+
+                <!-- HEATMAP -->
+
+                <div class="image-card">
+
+                    <h2>Heatmap</h2>
+
+                    {% if heatmap %}
+                    <img src="{{ url_for('static', filename='uploads/' + heatmap) }}">
+                    {% endif %}
+
+                </div>
+
+                <!-- TAMPERED -->
+
+                <div class="image-card">
+
+                    <h2>Tampered Area</h2>
+
+                    {% if tampered %}
+                    <img src="{{ url_for('static', filename='uploads/' + tampered) }}">
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
 
 </body>
+
 </html>
